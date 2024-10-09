@@ -12,3 +12,14 @@ def blog_list(request):
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
     return render(request, 'blog/blog_detail.html', {'blog': blog})
+
+def add_comment(request, blog_id):
+    if request.method == 'POST':
+        blog = get_object_or_404(Blog, id=blog_id)
+        comment = Comment.objects.create(
+            blog=blog,
+            user=request.user,
+            content=request.POST['content']
+        )
+        return redirect('blog_detail', blog_id=blog.id)
+
